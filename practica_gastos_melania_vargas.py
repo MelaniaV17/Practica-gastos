@@ -62,3 +62,66 @@ def mostrar_listado(lista_gastos):
     print("4. Salir")
     opcion = input("Seleccione una opción (1-4): ")
     return opcion
+
+def calcular_resumen(lista_gastos):
+    """
+    Calcula y retorna múltiples valores:
+    el total gastado, el promedio por gasto y el gasto de mayor monto.
+    """
+    if len(lista_gastos) == 0:
+        return 0.0, 0.0, None
+
+    total = sum(gasto['monto'] for gasto in lista_gastos)
+    promedio = total / len(lista_gastos)
+
+    # Se busca el gasto con el monto máximo utilizando una función lambda como clave
+    gasto_mayor = max(lista_gastos, key=lambda x: x['monto'])
+
+    return total, promedio, gasto_mayor
+
+def mostrar_resumen(lista_gastos):
+    """
+    Muestra el resumen de gastos utilizando la función de cálculo múltiple
+    y formateando los resultados obligatoriamente con f-strings a dos decimales.
+    """
+    print("\n----------------------------------------")
+    print("          RESUMEN DE GASTOS             ")
+    print("----------------------------------------")
+
+    if len(lista_gastos) == 0:
+        print("No hay suficientes datos para generar un resumen.")
+    else:
+        # Llamada a función que retorna múltiples valores
+        total, promedio, gasto_mayor = calcular_resumen(lista_gastos)
+
+        print(f"Total gastado: ${total:.2f}")
+        print(f"Promedio por gasto: ${promedio:.2f}")
+        print(f"Gasto de mayor monto: {gasto_mayor['descripcion']} con ${gasto_mayor['monto']:.2f}")
+
+def main():
+    """
+    Función principal que controla el flujo de ejecución del programa y el bucle del menú.
+    """
+    gastos = []
+
+    # Bucle principal que se repite hasta que el usuario decide salir
+    while True:
+        # Llamada a función utilizando argumentos con nombre
+        opcion = mostrar_menu(simbolo="$")
+
+        if opcion == "1":
+            registrar_gasto(lista_gastos=gastos)
+        elif opcion == "2":
+            mostrar_listado(gastos)
+        elif opcion == "3":
+            mostrar_resumen(gastos)
+        elif opcion == "4":
+            print(f"\nCantidad total de operaciones de registro realizadas: {conteo_registros}")
+            print("¡Gracias por utilizar el gestor de gastos personales. Hasta luego!")
+            break
+        else:
+            print("Opción no válida. Por favor, seleccione un número entre 1 y 4.")
+
+# Bloque de ejecución principal
+if __name__ == "__main__":
+    main()
